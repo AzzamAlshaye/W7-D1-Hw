@@ -11,6 +11,7 @@ import {
   FiHelpCircle,
   FiCheckCircle,
   FiXCircle,
+  FiArrowRight,
 } from "react-icons/fi";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -249,8 +250,8 @@ export default function JobApplicationForm() {
 
       {/* Success Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-8 max-w-sm w-full text-center space-y-4 shadow-lg">
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 px-3 md:px-0">
+          <div className="bg-white rounded-xl p-8 max-w-sm w-full text-center space-y-3 shadow-lg flex flex-col items-center justify-center ">
             <FiCheckCircle size={48} className="mx-auto text-green-600" />
             <h3 className="text-xl font-bold text-gray-800">
               Application Submitted!
@@ -261,13 +262,24 @@ export default function JobApplicationForm() {
             </p>
             <Link
               to="/applications"
-              className="text-indigo-600 underline font-medium"
+              className="
+                inline-flex items-center gap-2
+                bg-indigo-100 text-indigo-700
+                hover:bg-indigo-200 hover:text-indigo-800
+                font-semibold
+                px-4 py-2
+                rounded-full
+                shadow-sm hover:shadow-md
+                transition-all duration-200
+                focus:outline-none focus:ring-2 focus:ring-indigo-500
+              "
             >
               View My Applications
+              <FiArrowRight size={16} className="ml-1" />
             </Link>
             <button
               onClick={() => setShowModal(false)}
-              className="mt-4 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
+              className="mt-4 inline-flex w-50 justify-center items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
             >
               <FiXCircle className="mr-2" /> Close
             </button>
