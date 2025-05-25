@@ -1,9 +1,12 @@
-// import React from "react";
+/* src/components/Footer.jsx */
+import React from "react";
 
-// export default function Footer() {
-//   return (
-//     <footer className="bg-gray-100 text-center p-4">
-//       &copy; {new Date().getFullYear()} Tuwaiq Academy
-//     </footer>
-//   );
-// }
+export default function Footer() {
+  return (
+    <footer className="bg-gray-800 text-white">
+      <div className="container mx-auto px-4 py-6 text-center text-sm">
+        &copy; {new Date().getFullYear()} My Company. All rights reserved.
+      </div>
+    </footer>
+  );
+}
