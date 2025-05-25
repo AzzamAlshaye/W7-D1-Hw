@@ -20,9 +20,9 @@ export default function Navbar() {
     <nav className="bg-gray-900 text-white shadow-md relative">
       <div className="container mx-auto flex items-center justify-between lg:justify-normal lg:gap-10 p-4">
         {/* Brand */}
-        <Link to="/" className="flex items-center space-x-2">
-          <FaGamepad className="text-2xl" />
-          <span className="text-xl font-bold">GameScope</span>
+        <Link to="/" className="flex items-center space-x-2 justify-center">
+          <img src="react-icon.webp" alt=" website icon" className="h-12" />
+          <span className="text-xl font-bold">My Compeny</span>
         </Link>
 
         {/* Desktop links */}

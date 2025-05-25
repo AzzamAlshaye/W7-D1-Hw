@@ -2,6 +2,16 @@
 import React, { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router";
+import {
+  FiUser,
+  FiCalendar,
+  FiMapPin,
+  FiDollarSign,
+  FiEdit,
+  FiHelpCircle,
+  FiCheckCircle,
+  FiXCircle,
+} from "react-icons/fi";
 import "react-toastify/dist/ReactToastify.css";
 
 const cities = ["Riyadh", "Jeddah", "Dammam", "Mecca", "Medina"];
@@ -30,15 +40,10 @@ export default function JobApplicationForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((p) => ({ ...p, [name]: value }));
   };
-
-  const handleAnswer = (i, value) => {
-    setForm((prev) => ({
-      ...prev,
-      answers: { ...prev.answers, [i]: value },
-    }));
-  };
+  const handleAnswer = (i, value) =>
+    setForm((p) => ({ ...p, answers: { ...p.answers, [i]: value } }));
 
   const validate = () => {
     const errs = {};
@@ -69,10 +74,12 @@ export default function JobApplicationForm() {
     } else {
       setErrors({});
       const existing = JSON.parse(localStorage.getItem("applications") || "[]");
-      const entry = { ...form, date: new Date().toISOString() };
       localStorage.setItem(
         "applications",
-        JSON.stringify([...existing, entry])
+        JSON.stringify([
+          ...existing,
+          { ...form, date: new Date().toISOString() },
+        ])
       );
       setShowModal(true);
     }
@@ -81,151 +88,192 @@ export default function JobApplicationForm() {
   return (
     <>
       <ToastContainer position="top-right" autoClose={3000} />
-      <div className="container mx-auto bg-white shadow rounded p-8 my-8">
-        <h2 className="text-2xl font-bold mb-4">Job Application</h2>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block font-medium mb-1">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-            )}
-          </div>
-          <div>
-            <label className="block font-medium mb-1">Birth Date</label>
-            <input
-              type="date"
-              name="birthDate"
-              value={form.birthDate}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-            />
-            {errors.birthDate && (
-              <p className="text-red-500 text-sm mt-1">{errors.birthDate}</p>
-            )}
-          </div>
-          <div>
-            <label className="block font-medium mb-1">Desired City</label>
-            <select
-              name="city"
-              value={form.city}
-              onChange={handleChange}
-              className="w-full border rounded p-2"
-            >
-              <option value="">Select a city</option>
-              {cities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </select>
-            {errors.city && (
-              <p className="text-red-500 text-sm mt-1">{errors.city}</p>
-            )}
-          </div>
-          <div>
-            <p className="block font-medium mb-1">Expected Salary</p>
-            {salaryRanges.map((range) => (
-              <label key={range.value} className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="salary"
-                  value={range.value}
-                  checked={form.salary === range.value}
-                  onChange={handleChange}
-                  className="mr-2"
-                />
-                <span>{range.label}</span>
-              </label>
-            ))}
-            {errors.salary && (
-              <p className="text-red-500 text-sm mt-1">{errors.salary}</p>
-            )}
-          </div>
-          <div>
-            <label className="block font-medium mb-1">
-              Why are you applying?
-            </label>
-            <textarea
-              name="motivation"
-              value={form.motivation}
-              onChange={handleChange}
-              className="w-full border rounded p-2 h-24"
-            />
-            {errors.motivation && (
-              <p className="text-red-500 text-sm mt-1">{errors.motivation}</p>
-            )}
-          </div>
-          <div>
-            <p className="block font-medium mb-2">Additional Questions</p>
-            {questions.map((q, i) => (
-              <div key={i} className="flex items-center space-x-4">
-                <span className="flex-1">{q}</span>
-                <button
-                  type="button"
-                  onClick={() => handleAnswer(i, "Yes")}
-                  className={`px-4 py-1 rounded ${
-                    form.answers[i] === "Yes"
-                      ? "bg-blue-500 text-white"
-                      : "border"
-                  }`}
-                >
-                  Yes
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleAnswer(i, "No")}
-                  className={`px-4 py-1 rounded ${
-                    form.answers[i] === "No"
-                      ? "bg-blue-500 text-white"
-                      : "border"
-                  }`}
-                >
-                  No
-                </button>
-              </div>
-            ))}
-            {questions.map(
-              (_, i) =>
-                errors[i] && (
-                  <p key={i} className="text-red-500 text-sm">
-                    {errors[i]}
-                  </p>
-                )
-            )}
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-green-600 text-white p-3 rounded hover:bg-green-700"
-          >
-            Submit
-          </button>
-        </form>
 
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white rounded p-8 max-w-sm w-full text-center space-y-4">
-              <h2 className="text-xl font-bold">Application Submitted!</h2>
-              <p>Thank you, {form.name}. Your application has been saved.</p>
-              <Link to="/applications" className="mt-2 text-blue-600 underline">
-                View My Applications
-              </Link>
-              <button
-                onClick={() => setShowModal(false)}
-                className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-200 py-12 px-4">
+        <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div className="flex items-center space-x-2 bg-indigo-600 text-white px-6 py-4">
+            <FiEdit size={24} />
+            <h2 className="text-2xl font-semibold">Job Application</h2>
+          </div>
+
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6"
+          >
+            {/* Name */}
+            <div>
+              <label className="flex items-center text-gray-700 mb-1">
+                <FiUser className="mr-2" /> Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-indigo-300"
+              />
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+              )}
+            </div>
+
+            {/* Birth Date */}
+            <div>
+              <label className="flex items-center text-gray-700 mb-1">
+                <FiCalendar className="mr-2" /> Birth Date
+              </label>
+              <input
+                type="date"
+                name="birthDate"
+                value={form.birthDate}
+                onChange={handleChange}
+                className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-indigo-300"
+              />
+              {errors.birthDate && (
+                <p className="text-red-500 text-sm mt-1">{errors.birthDate}</p>
+              )}
+            </div>
+
+            {/* City */}
+            <div>
+              <label className="flex items-center text-gray-700 mb-1">
+                <FiMapPin className="mr-2" /> Desired City
+              </label>
+              <select
+                name="city"
+                value={form.city}
+                onChange={handleChange}
+                className="w-full border rounded-lg p-2 focus:ring-2 focus:ring-indigo-300"
               >
-                Close
+                <option value="">Select a city</option>
+                {cities.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+              {errors.city && (
+                <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+              )}
+            </div>
+
+            {/* Salary */}
+            <div>
+              <p className="flex items-center text-gray-700 mb-1">
+                <FiDollarSign className="mr-2" /> Expected Salary
+              </p>
+              <div className="space-y-2">
+                {salaryRanges.map((r) => (
+                  <label key={r.value} className="flex items-center space-x-2">
+                    <input
+                      type="radio"
+                      name="salary"
+                      value={r.label}
+                      checked={form.salary === r.label}
+                      onChange={handleChange}
+                      className="h-4 w-4 text-indigo-600"
+                    />
+                    <span className="text-gray-800">{r.label}</span>
+                  </label>
+                ))}
+              </div>
+              {errors.salary && (
+                <p className="text-red-500 text-sm mt-1">{errors.salary}</p>
+              )}
+            </div>
+
+            {/* Motivation */}
+            <div className="md:col-span-2">
+              <label className="flex items-center text-gray-700 mb-1">
+                <FiEdit className="mr-2" /> Why are you applying?
+              </label>
+              <textarea
+                name="motivation"
+                value={form.motivation}
+                onChange={handleChange}
+                className="w-full border rounded-lg p-2 h-24 focus:ring-2 focus:ring-indigo-300"
+              />
+              {errors.motivation && (
+                <p className="text-red-500 text-sm mt-1">{errors.motivation}</p>
+              )}
+            </div>
+
+            {/* Additional Questions */}
+            <div className="md:col-span-2 space-y-4">
+              <p className="flex items-center text-gray-700 mb-2">
+                <FiHelpCircle className="mr-2" /> Additional Questions
+              </p>
+              {questions.map((q, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-50 p-4 rounded-lg"
+                >
+                  <span className="mb-2 sm:mb-0 text-gray-800">{q}</span>
+                  <div className="space-x-2">
+                    {["Yes", "No"].map((ans) => (
+                      <button
+                        key={ans}
+                        type="button"
+                        onClick={() => handleAnswer(i, ans)}
+                        className={`px-4 py-1 rounded-lg font-medium ${
+                          form.answers[i] === ans
+                            ? "bg-indigo-600 text-white"
+                            : "border border-gray-300 text-gray-700"
+                        }`}
+                      >
+                        {ans}
+                      </button>
+                    ))}
+                  </div>
+                  {errors[i] && (
+                    <p className="text-red-500 text-sm mt-1 sm:mt-0">
+                      {errors[i]}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Submit */}
+            <div className="md:col-span-2">
+              <button
+                type="submit"
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg shadow"
+              >
+                Submit Application
               </button>
             </div>
-          </div>
-        )}
+          </form>
+        </div>
       </div>
+
+      {/* Success Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-8 max-w-sm w-full text-center space-y-4 shadow-lg">
+            <FiCheckCircle size={48} className="mx-auto text-green-600" />
+            <h3 className="text-xl font-bold text-gray-800">
+              Application Submitted!
+            </h3>
+            <p className="text-gray-600">
+              Thank you, <span className="font-semibold">{form.name}</span>.
+              Your application has been saved.
+            </p>
+            <Link
+              to="/applications"
+              className="text-indigo-600 underline font-medium"
+            >
+              View My Applications
+            </Link>
+            <button
+              onClick={() => setShowModal(false)}
+              className="mt-4 inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg"
+            >
+              <FiXCircle className="mr-2" /> Close
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
